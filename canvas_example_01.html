@@ -3,119 +3,137 @@
 	<body>
 		
 
-		<canvas id="canvas" width="300" height="300" style="border: 2px solid #cccccc;">
-    		HTML5 Canvas not supported
+		<canvas id="canvas" width="800" height="700" style="border: 2px solid #cccccc;">
+			HTML5 Canvas not supported
 		</canvas>
 
-<script>
+		<script>
 
- 
+		
 // Vec2 class
-   var Vec2  = function(x, y) {
-		this.x = x;
-		this.y = y;
-	};
+var Vec2  = function(x, y) {
+	this.x = x;
+	this.y = y;
+};
 
-	Vec2.prototype.add = function(vec2){
-		this.x += vec2.x;
-		this.y += vec2.y;
-	};
+Vec2.prototype.add = function(vec2){
+	this.x += vec2.x;
+	this.y += vec2.y;
+};
 
-	Vec2.prototype.sub = function(vec2){
-		this.x -= vec2.x;
-		this.y -= vec2.y;
-	};
+Vec2.prototype.addSclr = function(sclr){
+	this.x += sclr;
+	this.y += sclr;
+};
 
-	Vec2.prototype.mult = function(vec2){
-		this.x *= vec2.x;
-		this.y *= vec2.y;
-	};
+Vec2.prototype.sub = function(vec2){
+	this.x -= vec2.x;
+	this.y -= vec2.y;
+};
 
-	Vec2.prototype.div = function(vec2){
-		this.x /= vec2.x;
-		this.y /= vec2.y;
-	};
+Vec2.prototype.mult = function(vec2){
+	this.x *= vec2.x;
+	this.y *= vec2.y;
+};
 
-	
+Vec2.prototype.div = function(vec2){
+	this.x /= vec2.x;
+	this.y /= vec2.y;
+};
+
+
 	// Particle class
-	 var Particle  = function(pos, spd, radius) {
+	var Particle  = function(pos, spd, radius) {
 		this.pos = pos;
 		this.spd = spd;
 		this.radius = radius;
+		this.age = 0;
 	};
 
-	Particle.prototype.move = function(vec2){
-		this.pos.add(vec2);
+	Particle.prototype.move = function(){
+		this.spd.x += Math.random()*-.5+Math.random()*.5;
+		this.pos.add(this.spd);
+		this.age++;
 	};
 
-	Particle.prototype.display = function(){
-		var ctx = document.getElementById('canvas').getContext('2d');
+	Particle.prototype.display = function(ctx){
 
-	  ctx.globalCompositeOperation = 'destination-over';
-	  ctx.clearRect(0,0,300,300); // clear canvas
-
-	  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-	  ctx.strokeStyle = 'rgba(0,153,255,0.4)';
-	  ctx.save();
-	  ctx.translate(150,150);
+		
+	  // ctx.save();
+	  // ctx.translate(150,150);
 
 	  ctx.beginPath();
-	  ctx.arc(150,150,105,0,Math.PI*2,false); // Earth orbit
+	  ctx.fillStyle = 'rgba(0,225,225,.25)';
+	  ctx.strokeStyle = 'rgba(0,165,225,.25)';
+	  ctx.arc(this.pos.x, this.pos.y,this.radius,0,Math.PI*2,false); // Earth orbit
+	  ctx.fill();
 	  ctx.stroke();
 	};
 
 
+	var particleCount = 750;
+	var particles = [];
+	var gravity = .03;
+	var damping = .675;
+	var friction = .789;
 
-	var sun = new Image();
-	var moon = new Image();
-	var earth = new Image();
-
+	var birthRate = .5;
+	var liveCount = 0;
+	var theta = 0;
 	function init(){
-	  sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
-	  moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
-	  earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
-	  window.requestAnimationFrame(draw);
+		for (var i=0; i<particleCount; i++) {
+			particles[i] = new Particle(new Vec2(canvas.width/2, canvas.height/4), new Vec2(Math.random()*-1.2+Math.random()*1.2, Math.random()*-4.3), 1+Math.random()*6.0);
+		}
+		window.requestAnimationFrame(draw);
 	}
 
 	function draw() {
-	  var ctx = document.getElementById('canvas').getContext('2d');
+		var ctx = document.getElementById('canvas').getContext('2d');
+		//ctx.globalCompositeOperation = 'destination-over';
+		//
+		ctx.fillStyle = 'rgba(9,225,225,0.05)';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-	  ctx.globalCompositeOperation = 'destination-over';
-	  ctx.clearRect(0,0,300,300); // clear canvas
 
-	  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-	  ctx.strokeStyle = 'rgba(0,153,255,0.4)';
-	  ctx.save();
-	  ctx.translate(150,150);
+		for (var i=0; i<liveCount; i++) {
+			particles[i].spd.y += gravity;
+			particles[i].move();
+			particles[i].display(ctx);
+			
 
-	  // Earth
-	  var time = new Date();
-	  ctx.rotate( ((2*Math.PI)/60)*time.getSeconds() + ((2*Math.PI)/60000)*time.getMilliseconds() );
-	  ctx.translate(105,0);
-	  ctx.fillRect(0,-12,50,24); // Shadow
-	  ctx.drawImage(earth,-12,-12);
+			if(particles[i].pos.y > canvas.height - particles[i].radius) {
+				particles[i].pos.y = canvas.height - particles[i].radius;
+				particles[i].spd.y *= -1;
+				particles[i].spd.y *= damping;
+				particles[i].spd.x *= friction;
+			}
 
-	  // Moon
-	  ctx.save();
-	  ctx.rotate( ((2*Math.PI)/6)*time.getSeconds() + ((2*Math.PI)/6000)*time.getMilliseconds() );
-	  ctx.translate(0,28.5);
-	  ctx.drawImage(moon,-3.5,-3.5);
-	  ctx.restore();
+			if(particles[i].pos.x > canvas.width - particles[i].radius) {
+				particles[i].pos.x = canvas.width - particles[i].radius;
+				particles[i].spd.x *= -1;
+			} else if(particles[i].pos.x < particles[i].radius) {
+				particles[i].pos.x = particles[i].radius;
+				particles[i].spd.x *= -1;
+			} 
+			if (particles[i].age > 1000) {
+				particles[i].pos.x = canvas.width/2;
+				particles[i].pos.y = canvas.height/4;
+				particles[i].age = 0;
+				particles[i].spd.x = Math.random()*-1.2+Math.random()*1.2;
+				particles[i].spd.y = Math.random()*-4.3;
+			}
+		}
 
-	  ctx.restore();
-	  
-	  ctx.beginPath();
-	  ctx.arc(150,150,105,0,Math.PI*2,false); // Earth orbit
-	  ctx.stroke();
-	 
-	  ctx.drawImage(sun,0,0,300,300);
+		if(liveCount < particleCount - birthRate) {
+			liveCount += birthRate;
+		}
 
-	  window.requestAnimationFrame(draw);
+		window.requestAnimationFrame(draw);
 	}
 
 	init();
 	</script>
 
-	</body>
+</body>
 
-	</html>
+</html>
