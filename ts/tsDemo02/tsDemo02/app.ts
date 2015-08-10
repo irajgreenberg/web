@@ -13,6 +13,7 @@
 
     start() {
         this.timerToken = setInterval(() => this.span.innerHTML = new Date().toUTCString(), 500);
+        //console.log("hello");
 
     }
 
@@ -25,5 +26,9 @@
 window.onload = () => {
     var el = document.getElementById('content');
     var greeter = new Greeter(el);
+
+    var v = new Vec2(-234.56, 1278.3);
+    var v2 = new Vec2(-234.56, 1278.3);
+   // alert(v.isEqual(v2));
     greeter.start();
 };

@@ -9,6 +9,7 @@ var Greeter = (function () {
     Greeter.prototype.start = function () {
         var _this = this;
         this.timerToken = setInterval(function () { return _this.span.innerHTML = new Date().toUTCString(); }, 500);
+        //console.log("hello");
     };
     Greeter.prototype.stop = function () {
         clearTimeout(this.timerToken);
@@ -18,6 +19,9 @@ var Greeter = (function () {
 window.onload = function () {
     var el = document.getElementById('content');
     var greeter = new Greeter(el);
+    var v = new Vec2(-234.56, 1278.3);
+    var v2 = new Vec2(-234.56, 1278.3);
+    // alert(v.isEqual(v2));
     greeter.start();
 };
 //# sourceMappingURL=app.js.map

@@ -1,122 +1,103 @@
-﻿class Vec2 {
-    x: number;
-    y: number;
-
-    constructor(x: number, y: number) {
+var Vec2 = (function () {
+    function Vec2(x, y) {
         this.x = x;
         this.y = y;
     }
-
-    // BEGIN general arithmatic calls
-    add(val: Vec2);
-    add(val: number);
-    add(val?: any) {
+    Vec2.prototype.add = function (val) {
         if (typeof val === "number") {
             this.x += val;
             this.y += val;
-        } else if (val instanceof Vec2) {
+        }
+        else if (val instanceof Vec2) {
             this.x += val.x;
             this.y += val.y;
-        } else {
+        }
+        else {
             throw new TypeError("Argument must be of type Vec2 or number");
         }
-    }
-
-    sub(val: Vec2);
-    sub(val: number);
-    sub(val?: any) {
+    };
+    Vec2.prototype.sub = function (val) {
         if (typeof val === "number") {
             this.x -= val;
             this.y -= val;
-        } else if (val instanceof Vec2) {
+        }
+        else if (val instanceof Vec2) {
             this.x -= val.x;
             this.y -= val.y;
-        } else {
+        }
+        else {
             throw new TypeError("Argument must be of type Vec2 or number");
         }
-    }
-
-    mult(val: Vec2);
-    mult(val: number);
-    mult(val?: any) {
+    };
+    Vec2.prototype.mult = function (val) {
         if (typeof val === "number") {
             this.x *= val;
             this.y *= val;
-        } else if (val instanceof Vec2) {
+        }
+        else if (val instanceof Vec2) {
             this.x *= val.x;
             this.y *= val.y;
-        } else {
+        }
+        else {
             throw new TypeError("Argument must be of type Vec2 or number");
         }
-    }
-
-    div(val: Vec2);
-    div(val: number);
-    div(val?: any) {
+    };
+    Vec2.prototype.div = function (val) {
         if (typeof val === "number") {
             this.x /= val;
             this.y /= val;
-        } else if (val instanceof Vec2) {
+        }
+        else if (val instanceof Vec2) {
             this.x /= val.x;
             this.y /= val.y;
-        } else {
+        }
+        else {
             throw new TypeError("Argument must be of type Vec2 or number");
         }
-    }
+    };
     // END
-
     // BEGIN static calls most common cases
-    static add(v0: Vec2, v1: Vec2): Vec2 {
+    Vec2.add = function (v0, v1) {
         var v = v0.clone(); // avoid side effects
         v.add(v1);
         return v;
-    }
-
-    static sub(v0: Vec2, v1: Vec2): Vec2 {
+    };
+    Vec2.sub = function (v0, v1) {
         var v = v0.clone(); // avoid side effects
         v.sub(v1);
         return v;
-    }
-
-    static mult(v0: Vec2, s: number): Vec2 {
+    };
+    Vec2.mult = function (v0, s) {
         var v = v0.clone(); // avoid side effects
         v.mult(s);
         return v;
-    }
-
-    static div(v0: Vec2, s: number): Vec2 {
+    };
+    Vec2.div = function (v0, s) {
         var v = v0.clone(); // avoid side effects
         v.div(s);
         return v;
-    }
-
-    static dot(v0: Vec2, v1: Vec2): number {
+    };
+    Vec2.dot = function (v0, v1) {
         return v0.dot(v1);
-    }
-
-    static reflect(v0: Vec2, v1: Vec2): Vec2 {
+    };
+    Vec2.reflect = function (v0, v1) {
         return v0.reflect(v1);
-    }
+    };
     // END
-
     // BEGIN general methods
-    dot(v: Vec2): number {
+    Vec2.prototype.dot = function (v) {
         return this.x * v.x + this.y * v.y;
-    }
-
-    mag(): number {
+    };
+    Vec2.prototype.mag = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-
-    direction(): number {
+    };
+    Vec2.prototype.direction = function () {
         return Math.atan2(this.y, this.x);
-    }
-
-    inverse() {
+    };
+    Vec2.prototype.inverse = function () {
         this.mult(-1);
-    }
-
-    reflect(n: Vec2): Vec2 {
+    };
+    Vec2.prototype.reflect = function (n) {
         // based on R = 2N(N*L)-L
         var l = this.clone();
         var m = this.mag();
@@ -128,30 +109,24 @@
         n.sub(l);
         n.mult(m);
         return n;
-    }
-
-    normalize() {
+    };
+    Vec2.prototype.normalize = function () {
         var n = this.mag();
         this.div(n);
-    }
-
-    setTo(v: Vec2) {
+    };
+    Vec2.prototype.setTo = function (v) {
         this.x = v.x;
         this.y = v.y;
-    }
-
-    clone(): Vec2 {
+    };
+    Vec2.prototype.clone = function () {
         return new Vec2(this.x, this.y);
-    }
-
-    toString(): string {
+    };
+    Vec2.prototype.toString = function () {
         return "x: " + this.x + ", y: " + this.y + ", mag: " + this.mag();
-    }
-
-    isEqual(v: Vec2): boolean {
+    };
+    Vec2.prototype.isEqual = function (v) {
         return (this.x == v.x && this.y == v.y);
-    }
-
-}
-
-  
+    };
+    return Vec2;
+})();
+//# sourceMappingURL=Vec2.js.map

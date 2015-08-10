@@ -24,6 +24,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="DrawingUtil.ts" />
+    <TypeScriptCompile Include="MathUtil.ts" />
     <TypeScriptCompile Include="Vec2.ts" />
   </ItemGroup>
   <ItemGroup>
