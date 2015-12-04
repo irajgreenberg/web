@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dynamic HTML Art 02</title>
+
+<style>
+table {
+	width: 100%;
+	background-color: #445588;
+	/*eliminate border*/
+	border-collapse: collapse;
+}
+
+td {
+	/*eliminate border*/
+	padding: 0;
+}
+
+
+</style>
+
+<script>
+
+function createHTMLGradient(rows, cols, startColor, endColor){
+	//var c1 = parseInt(startColor);
+	alert("hello");
+	var r = (startColor >> 16) & 0xFF;
+	var g = (startColor >> 8) & 0xFF;
+	var b = startColor  & 0xFF;
+	var a = (startColor >> 24) & 0xFF;
+
+
+
+var myString = "<table> \n"
+	for(var i=0; i<rows; i++){
+		myString += "<tr> \n";
+		for(var j=0; j<cols; j++){
+			myString += "<td style=\"background-color: rgba("+r+", "+g+", "+b+", 1.0);\"> &nbsp; </td> \n"
+		}
+		myString += "</tr> \n"
+	}
+	myString += "</table> \n"
+	document.write(myString);
+}
+
+</script>
+</head>
+
+<body>
+	<script>
+	var c1 = rgba(200, 200, 200, 1.0);
+	var c2 = rgba(200, 200, 200, 1.0);
+	createHTMLGradient(20, 20, c1, c2);
+ 	</script>
+</body>
+
+
+</html>
