@@ -1,5 +1,5 @@
-// Vec2 class
-var Vec2  = function(x, y) {
+// Simple Vec2 class
+function Vec2(x, y) {
 	this.x = x;
 	this.y = y;
 };
@@ -35,5 +35,5 @@ Vec2.prototype.set = function(vec2){
 };
 
 Vec2.prototype.mag = function(){
-	return Math.sqrt(x*x + y*y);
+	return Math.sqrt(this.x*this.x + this.y*this.y);
 };

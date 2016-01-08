@@ -1,5 +1,6 @@
-// Verlet Node
-var VerletNode  = function(pos) {
+// Verlet Node class
+
+function VerletNode(pos) {
 	this.pos = pos;
 	this.posOld = new Vec2(pos.x, pos.y);
 };
@@ -16,3 +17,13 @@ VerletNode.prototype.verlet = function(){
 
 	this.posOld.set(posTemp);
 };
+
+  VerletNode.prototype.display = function(ctx, rad, col){
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(this.pos.x, this.pos.y,rad,0,2*Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+	ctx.arc(this.pos.x, this.pos.y,rad,0,2*Math.PI);
+	ctx.fill();
+  };
