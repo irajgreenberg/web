@@ -3,15 +3,21 @@
 <head>
 
 <style>
-p {
+p.core {
+font-family: Arial;
 background-color: #aadd33;
 text-indent: 5em;
 }
 
-div {
-background-color: #aadd33;
-text-indent: 5em;
+.extrastuff {
+    background-color: #ff9900;
+    font-family: "Times New Roman", Times, serif;
 }
+
+#coolbeans {
+    background-color: #ffff00;
+}
+
 </style>
 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
@@ -19,7 +25,9 @@ text-indent: 5em;
 <script>
 $(function(){
     $("button").click(function(){
-        $("div").hide(5000);
+        $("p").fadeOut(5000);
+        $("p").slideUp(20);
+         $(".extrastuff").hide(1000);
     });
      $("p").mouseenter(function(){
         $("p").css("background-color", "lightblue");
@@ -28,14 +36,34 @@ $(function(){
      $("p").mouseleave(function(){
         $("p").css("background-color", "#aadd33");
     });
+
+      $(".extrastuff").mouseenter(function(){
+        $(".extrastuff").css("background-color", "lightblue");
+    });
+
+     $(".extrastuff").mouseleave(function(){
+        $(".extrastuff").css("background-color", "#ff9900");
+    });
 });
 </script>
 
 </head>
 <body>
-	<div>
+	<p class="core">
 		This is a cool test.
-	</div>
+	</p>
+
+    <div class="extrastuff">
+        This is an even cooler test.
+    </div>
+
+    <p id="coolbeans">
+        This is a ridiculously cool test.
+    </p>
+
+     <p id="coolbeans">
+        This is a ridiculously cool test 02.
+    </p>
 	<button>Click me</button>
 <body>
 </html>
