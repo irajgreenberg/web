@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+
+    <style>
+    p {
+
+    	background-color: #ff8833;
+    }
+
+
+	a.test {
+	    font-weight: bold;
+	}
+
+    </style>
+
+</head>
+<body>
+   <p>
+   	click me
+   </p>
+
+   <a href="http://smu.edu"> smu </a>
+    <script src="jquery-1.12.0.js"></script>
+    <script>
+ 
+	 window.onload = function() {
+	   // alert( "welcome" );
+	};
+
+	// short cut form
+	$(function() {
+	//$( document ).ready(function() {
+		  console.log( "ready!" );
+		 
+		$( "a" ).addClass( "test" );
+		//$( "a" ).attr( "href", "http://netflix.com" );
+
+		$( "a" ).attr( {
+			title: "netflix",
+			href: "http://netflix.com"
+		});
+
+
+	 //    $( "a" ).attr({
+		//     title: "all titles are the same too!",
+		//     href: "somethingNew.html"
+		// });
+
+	    $( "a" ).click(function( event) {
+	    	$( this ).hide( "slow" );
+	    	 myCallBack( "ira", "greenberg" );
+	       //alert( "what's up");
+	        //event.preventDefault();
+	       
+	    });
+
+	   console.log ($( ".test" ));
+	    
+	});
+
+	$( document ).ready( party);
+
+	function myCallBack(fName, lName){
+	//	alert(fName + lName);
+	}
+
+	function party(){
+		console.log("partying!!");
+	}
+
+    </script>
+
+     <iframe src="http://smu.edu"></iframe>
+</body>
+</html>
