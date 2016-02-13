@@ -5,7 +5,7 @@ function VerletNode(pos) {
 	this.posOld = new Vec2(pos.x, pos.y);
 };
 
-VerletNode.prototype.push = function(offset){
+VerletNode.prototype.nudge = function(offset){
 	this.pos.add(offset);
 };
 

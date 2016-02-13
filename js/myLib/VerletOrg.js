@@ -19,8 +19,8 @@ function VerletOrg(pos, vecs, indices, rules) {
 	//this.pos.add(offset);
 };
 
-VerletOrg.prototype.push = function(nodeID, offset){
-	this.nodes[nodeID].push(offset);
+VerletOrg.prototype.nudge = function(nodeID, offset){
+	this.nodes[nodeID].nudge(offset);
 };
 
 
