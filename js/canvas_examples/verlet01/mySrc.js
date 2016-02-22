@@ -11,6 +11,10 @@ var vecs = [
 			new Vec2(-100, 200), new Vec2(100, 200), 
 			new Vec2(-100, 300), new Vec2(100, 300)];
 var indices = [
+	// structural hidden diagonals
+	new VerletIndex(0, 13, false), new VerletIndex(1, 12, false), 
+
+
 	new VerletIndex(0, 1, true), new VerletIndex(2, 3, true), new VerletIndex(4, 5, true), 
 	new VerletIndex(6, 7, true), new VerletIndex(8, 9, true), new VerletIndex(10, 11, true), new VerletIndex(12, 13, true),
 	new VerletIndex(0, 2, true), new VerletIndex(2, 4, true), new VerletIndex(4, 6, true), new VerletIndex(6, 8, true), new VerletIndex(8, 10, true), new VerletIndex(10, 12, true),
@@ -20,22 +24,31 @@ var indices = [
 
 
 var org = new VerletOrg(Vec2(0, 0), vecs, indices, 0);
-org.push(0, new Vec2(10.2, 3.25));
-org.push(5, new Vec2(-1.2, -5.25));
-org.push(10, new Vec2(4.2, .25));
+org.nudge(0, new Vec2(20.2, 10.25));
+org.nudge(5, new Vec2(-18.2, -15.25));
+org.nudge(10, new Vec2(4.2, .25));
 
+var globalCanvas;
 
 function init(){
 	window.requestAnimationFrame(draw);
 }
 
 function draw() {
-	var ctx = document.getElementById('canvas').getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	var canvas = document.getElementById('canvas');
+	var ctx = canvas.getContext('2d');
 
+	//ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // fade background
+	ctx.globalAlpha = 0.2;
+  	ctx.fillStyle = '#999999';
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
+
+    ctx.globalAlpha = 1.0;
 	ctx.save();
 	ctx.translate(200, 200);
-	ctx.scale(.2, .2);
+	ctx.scale(.5, .5);
 	org.run();
 	org.display(ctx);
 	ctx.restore();

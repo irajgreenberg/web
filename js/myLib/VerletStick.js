@@ -11,11 +11,11 @@ function VerletStick(n1, n2, stiffness, isVisible) {
                         (this.n2.pos.y-this.n1.pos.y)*(this.n2.pos.y-this.n1.pos.y) );
 };
 
-VerletStick.prototype.push = function(node, offset){
+VerletStick.prototype.nudge = function(node, offset){
     if(node==1) {
-        this.n1.push(offset);
+        this.n1.nudge(offset);
     } else {
-        this.n2.push(offset);
+        this.n2.nudge(offset);
     }
 };
 
