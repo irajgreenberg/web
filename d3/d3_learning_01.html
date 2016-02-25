@@ -37,6 +37,15 @@
 
 			d3.selectAll('#p2').style('background-color', 'orange');
 
+			var selector = d3.select('body')
+			.selectAll('div')
+			.data([10, 20, 30, 40]);
+
+			var entering = selector.enter();
+
+			entering.append('div')
+			.text(function(d) { return d;  });
+
 	</script>
 </body>
 </html>
