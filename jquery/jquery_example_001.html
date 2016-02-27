@@ -5,6 +5,11 @@
     <title>Demo</title>
 
     <style>
+    .myClass1 {
+    	background-color: #2244bb;
+    }
+
+
     p {
 
     	background-color: #ff8833;
@@ -20,7 +25,11 @@
 </head>
 <body>
    <p>
-   	click me
+   	Please click me
+   </p>
+
+   <p class="myClass1">
+   	Don't click me
    </p>
 
    <a href="http://smu.edu"> smu </a>
@@ -59,6 +68,13 @@
 	    });
 
 	   console.log ($( ".test" ));
+
+	  var ps = $( "p" );
+	  //console.log(ps.length);
+
+	$.each( ps, function( i, val ) {
+	  console.log(i + ": " + val );
+	});
 	    
 	});
 
