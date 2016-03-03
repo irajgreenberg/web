@@ -1,7 +1,5 @@
 // Verlet Example
-// Ira Greenberg
-
-
+// Ira Greenberg, 2016
 
 var vecs;
 var indices;
@@ -37,27 +35,23 @@ function setup() {
 	
 			];
 
-  org = new VerletOrg(new p5.Vector(0, 0), vecs, indices, 0);
+  org = new VerletOrg(new p5.Vector(0, 0), vecs, indices);
   org.nudge(0, new p5.Vector(20.2, 25.25));
   org.nudge(5, new p5.Vector(-1.2, -5.25));
   org.nudge(10, new p5.Vector(4.2, .25));
-
-  //print();
 
 }
 
 function draw() {
   // custom background with fade
-
   fill(135, 35);
   rect(0, 0, width, height);
 
 
   push();
- // translate(200, 200);
   scale(.5, .5);
   org.run();
-  org.display();
+  org.display(6, color(255, 127, 10), 6, color(20, 80, 255));
   pop();
 
 }
