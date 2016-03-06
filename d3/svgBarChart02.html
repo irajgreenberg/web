@@ -23,11 +23,11 @@ body {
 
 var barCount = 40;
 var padding = 3;
-var w = 1300;
+var w = 1300+25;
 var barWidth = (w-padding*(barCount-1))/barCount;
 var barHtMin = 20;
 var barHtMax = 240;
-var h = barHtMax;
+var h = barHtMax+205;
 
 var dataset = [];
 for(var i=0; i<barCount; i++) {
@@ -79,6 +79,30 @@ svg.selectAll("text")
            return barHtMax-d+15;
         })
        .attr("fill", "#ffffff");
+
+       // axes
+       // Define the axes
+       // Set the ranges
+var x = d3.time.scale().range([0, w]);
+var y = d3.scale.linear().range([barHtMax, 0]);
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+     // Add the X Axis
+    svg.append("g")
+        //.attr("class", "x axis")
+        .attr("transform", "translate(0," + barHtMax + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        //.attr("class", "y axis")
+        .call(yAxis);
+
+
 
 
 
