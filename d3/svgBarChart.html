@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<!-- Thanks: http://alignedleft.com/tutorials/d3/drawing-svgs -->
+
+<head>
+
+<meta charset="utf-8">
+<title>D3 Testing</title>
+<style>
+
+body {
+	background-color: #ddddee;
+}
+
+</style>
+
+</head>
+
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+
+var barCount = 40;
+var padding = 3;
+var w = 1300;
+var barWidth = (w-padding*(barCount-1))/barCount;
+var barHtMin = 20;
+var barHtMax = 240;
+var h = barHtMax;
+
+var dataset = [];
+for(var i=0; i<barCount; i++) {
+  dataset.push(barHtMin+Math.random()*(barHtMax-barHtMin));
+}
+
+var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+var rects = svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect");
+
+rects.attr("x", function(d, i) {
+            return (i*(barWidth+padding));
+        })
+       .attr("y", function(d, i) {
+            return barHtMax-d;
+        })
+       .attr("width", barWidth)
+       .attr("height", function(d, i) {
+            return d;
+        })
+       .attr("fill", "slategrey")
+       .attr("stroke", "#882222")
+       .attr("stroke-width", 2);
+
+
+// create an empty circle element for each data point automatically
+
+
+</script>
+
+</body>
+</html>

@@ -24,10 +24,17 @@ svg {
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 //Width and height
-var w = 500;
-var h = 100;
 
-var dataset = [ 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60 ];
+var w = 0;
+var h = 100;
+var dataset = [];
+
+for(var i=0; i<100; i++) {
+  dataset.push(i*i*.15);
+  w += (i*4);
+}
+
+
 
 // most d3 methods return a ref to dom on which they act, wich supports chaining
 var svg = d3.select("body")
@@ -43,14 +50,19 @@ var circles = svg.selectAll("circle")
 
 // create meanigful attributes for circles
 circles.attr("cx", function(d, i) {
-            return (i * 30) + 25;
+            return (d);
         })
        .attr("cy", function(d, i) {
             return 50+Math.sin(i*55*Math.PI/180.0)*25;
         })
        .attr("r", function(d) {
-            return d*.25;
-       });
+            return d*.015;
+       })
+       .attr("fill", "yellow")
+      .attr("stroke", "orange")
+      .attr("stroke-width", function(d) {
+        return d/80;
+      });
 
 </script>
 
