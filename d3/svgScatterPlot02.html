@@ -5,7 +5,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>Scatter Plot 01</title>
+<title>Scatter Plot 02</title>
 <style>
 
 body {
@@ -33,27 +33,29 @@ body {
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 
-var padding = 30;
+var margin = 30;
+var padding = 10;
 var width = 1000;
 var height = 600;
 var ptCount = 100;
 var dataset = [];
 for(var i=0; i<ptCount; i++) {
-  dataset.push([50+Math.random()*width-50, 50+Math.random()*height-50]);
+  dataset.push([Math.random()*3000, Math.random()*1000]);
 }
 
 
 var scaleX = d3.scale.linear()
                     .domain([d3.min(dataset, function(d){return d[0];}), d3.max(dataset, function(d){return d[0];})])
-                    .range([padding, width-padding]);
+                    .range([margin+padding, width-(padding+margin)])
+                    .clamp(true);
 
 var scaleY = d3.scale.linear()
                     .domain([d3.min(dataset, function(d){return d[1];}), d3.max(dataset, function(d){return d[1];})])
-                    .range([height-padding, padding]);
+                    .range([margin+padding, height-(padding+margin)])
 
 var scaleR = d3.scale.linear()
                      .domain([0, d3.max(dataset, function(d) { return d[1]; })])
-                     .range([4, 8]);
+                     .range([2, 4]);
 
 
 var svg = d3.select("body")
@@ -67,14 +69,19 @@ var svg = d3.select("body")
             .append("circle")
             .attr("cx", function(d) {
               return scaleX(d[0]);
-            })
+            })  
             .attr("cy", function(d) {
               return scaleY(d[1]);
             })
             .attr("r", function(d, i) {
               return scaleR(d[1]);
             })
-            .attr("fill", "#ffffff");
+            .attr("fill", "#ffffff")
+              .transition()
+              .attr("fill", "#ff4422")
+              .duration(4000)
+              .delay(100);
+
 
 
             // svg.selectAll("text")
@@ -95,26 +102,9 @@ var svg = d3.select("body")
             //   .attr("fill", "#888899");
 
 
-              // axes
-              // var xAxis = d3.svg.axis();
-              // var yAxis = d3.svg.axis();
-              // xAxis.scale(scaleX);
-              // yAxis.scale(scaleY);
-
-              // xAxis.orient("bottom");
-              // yAxis.orient("left");
-
-              // var xAxis = d3.svg.axis()
-              //     .scale(scaleX)
-              //     .orient("bottom");
-
-              // var yAxis = d3.svg.axis()
-              //     .scale(scaleY)
-              //     .orient("left");
-
               svg.append("g")
                   .attr("class", "axis")
-                  .attr("transform", "translate(0," + (height - padding) + ")")
+                  .attr("transform", "translate(0," + (height-margin)+ ")")
                   .call( d3.svg.axis()
                       .scale(scaleX)
                       .orient("bottom")
@@ -122,11 +112,11 @@ var svg = d3.select("body")
 
                svg.append("g")
                   .attr("class", "axis")
-                  .attr("transform", "translate("+padding+"," + 0 + ")")
+                  .attr("transform", "translate("+margin+"," + 0 + ")")
                   .call( d3.svg.axis()
                       .scale(scaleY)
                       .orient("left")
-                      .ticks(20) );
+                      .ticks(10) );
 
 </script>
 
