@@ -12,6 +12,19 @@ body {
 	background-color: #555566;
 }
 
+.axis path,
+.axis line {
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 9px;
+    fill: #ffffff;
+}
+
 </style>
 </head>
 
@@ -26,8 +39,19 @@ var w = 800, h = 600;
 var ptCount = 20;
 var dataSet = [];
 for(var i=0; i<ptCount; i++) {
-  dataSet.push({"x" : Math.random(), "y" : Math.random()});
+  dataSet.push({"x" : i/ptCount, "y" : Math.random()});
 }
+
+// generate scales
+var scaleX = d3.scale.linear()
+    .domain([d3.min(dataSet, function(d){return d[0];}), d3.max(dataSet, function(d){return d[0];})])
+    .range([0, w])
+    .clamp(true);
+
+var scaleY = d3.scale.linear()
+    .domain([d3.min(dataSet, function(d){return d[1];}), d3.max(dataSet, function(d){return d[1];})])
+    .range([0, h])
+
 
 // define accessor functions to get coord data
 var plotFunction = d3.svg.line()
@@ -38,7 +62,7 @@ var plotFunction = d3.svg.line()
 
 // set up svg
 var svgContainer = d3.select("body").append("svg")
-			.attr("width", w)
+   			.attr("width", w)
 			.attr("height", h);
 
 // plot some data
@@ -47,6 +71,24 @@ var plot = svgContainer.append("path")
 			.attr("stroke", "orange")
 			.attr("stroke-width", 4)
 			.attr("fill", "none");
+
+
+            // add some axes
+ svgContainer.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate(0," + (h-20)+ ")")
+			.call( d3.svg.axis()
+				.scale(scaleX)
+				.orient("bottom")
+				.ticks(5) );
+
+svgContainer.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate("+20+"," + 0 + ")")
+			.call( d3.svg.axis()
+				.scale(scaleY)
+				.orient("left")
+				.ticks(5) );
 
 
 </script>
