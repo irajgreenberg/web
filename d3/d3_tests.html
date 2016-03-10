@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script src="d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 10, right: 10, bottom: 20, left: 30},
+    width = 960 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+// generate some data
+var ptCount = 20;
+var dataSet = [];
+for(var i=0; i<ptCount; i++) {
+  dataSet.push({"x" : Math.random(), "y" : Math.random()});
+}
+
+var xScale = d3.scale.linear()
+    .domain([
+    	d3.min(dataSet, function(d){return d.x;}),
+    	d3.max(dataSet, function(d){return d.x;})
+    		])
+    .range([0, width]);
+
+var yScale = d3.scale.linear()
+    .domain([
+    	d3.min(dataSet, function(d){return d.y;}),
+    	d3.max(dataSet, function(d){return d.y;})
+    		])
+    .range([height, 0]);
+
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(20)
+    .tickSize(4, 12);
+
+
+ var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .ticks(14)
+    .tickSize(4, 12);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// add x Axis
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    // .call(d3.svg.axis()
+    //                   .scale(xScale)
+    //                   .orient("bottom")
+    //                   .ticks(4) )
+
+  .selectAll(".tick text")
+    .style("text-anchor", "middle")
+    .attr("x", -3)
+    .attr("y", 6);
+
+ // add y Axis
+ svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(0," + 0 + ")")
+    .call(yAxis)
+    // .call(d3.svg.axis()
+    //                   .scale(xScale)
+    //                   .orient("bottom")
+    //                   .ticks(4) )
+
+  .selectAll(".tick text")
+    .style("text-anchor", "end")
+    .attr("x", -5)
+    .attr("y", 0);
+
+</script>
