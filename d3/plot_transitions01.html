@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #dd6600;
+  shape-rendering: crispEdges;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.x.axis line {
+  fill: none;
+  stroke: #dd6600;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #dd6600;
+}
+
+</style>
+
+<body>
+<script src="d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 10, right: 10, bottom: 20, left: 30},
+    width = 960 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+// generate some data
+var ptCount = 20;
+var dataSet = [];
+for(var i=0; i<ptCount; i++) {
+  dataSet.push({"x" : 1/20*i, "y" : Math.random()});
+}
+
+var xScale = d3.scale.linear()
+    .domain([
+    	d3.min(dataSet, function(d){return d.x;}),
+    	d3.max(dataSet, function(d){return d.x;})
+    		])
+    .range([0, width]);
+
+var yScale = d3.scale.linear()
+    .domain([
+    	d3.min(dataSet, function(d){return d.y;}),
+    	d3.max(dataSet, function(d){return d.y;})
+    		])
+    .range([height, 0]);
+
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(20)
+    .tickSize(4, 12);
+
+
+ var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .ticks(14)
+    .tickSize(4, 12);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// add x Axis
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    // .call(d3.svg.axis()
+    //                   .scale(xScale)
+    //                   .orient("bottom")
+    //                   .ticks(4) )
+  .selectAll(".tick text")
+    .style("text-anchor", "middle")
+    .attr("x", -3)
+    .attr("y", 6);
+
+ // add y Axis
+ svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(0," + 0 + ")")
+    .call(yAxis)
+    // .call(d3.svg.axis()
+    //                   .scale(xScale)
+    //                   .orient("bottom")
+    //                   .ticks(4) )
+  .selectAll(".tick text")
+    .style("text-anchor", "end")
+    .attr("x", -5)
+    .attr("y", 0);
+
+    // plot line
+    // create a line function that can convert data[] into x and y points
+    var line = d3.svg.line()
+
+        // assign the X function to plot our line as we wish
+        .x(function(d,i) { 
+            // verbose logging to show what's actually being done
+            console.log('Plotting X value for data point: ' + d.x + ' using index: ' + i + ' to be at: ' + xScale(i) + ' using our xScale.');
+            // return the X coordinate where we want to plot this datapoint
+            return xScale(d.x); 
+        })
+        .y(function(d) { 
+            // verbose logging to show what's actually being done
+            console.log('Plotting Y value for data point: ' + d.y + ' to be at: ' + yScale(d.y) + " using our yScale.");
+            // return the Y coordinate where we want to plot this datapoint
+            return yScale(d.y); 
+        })
+
+        // Add the line by appending an svg:path element with the data line we created above
+        // do this AFTER the axes above so that the line is above the tick-lines
+        svg.append("svg:path").attr("d", line(dataSet))
+       
+
+
+</script>
