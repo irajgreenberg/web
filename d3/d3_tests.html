@@ -26,7 +26,7 @@ var margin = {top: 10, right: 10, bottom: 20, left: 30},
 var ptCount = 20;
 var dataSet = [];
 for(var i=0; i<ptCount; i++) {
-  dataSet.push({"x" : Math.random(), "y" : Math.random()});
+  dataSet.push({"x" : (i*1/2.0), "y" : Math.random()});
 }
 
 var xScale = d3.scale.linear()
@@ -34,7 +34,7 @@ var xScale = d3.scale.linear()
     	d3.min(dataSet, function(d){return d.x;}),
     	d3.max(dataSet, function(d){return d.x;})
     		])
-    .range([0, width]);
+    .range([0, width])
 
 var yScale = d3.scale.linear()
     .domain([
@@ -54,13 +54,13 @@ var xAxis = d3.svg.axis()
  var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left")
-    .ticks(14)
+    .ticks(28)
     .tickSize(4, 12);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // add x Axis
@@ -75,7 +75,7 @@ svg.append("g")
 
   .selectAll(".tick text")
     .style("text-anchor", "middle")
-    .attr("x", -3)
+    .attr("x", 0)
     .attr("y", 6);
 
  // add y Axis
@@ -92,5 +92,21 @@ svg.append("g")
     .style("text-anchor", "end")
     .attr("x", -5)
     .attr("y", 0);
+
+    // plot data
+    // define accessor functions to get coord data
+    var plotFunction = d3.svg.line()
+    // manually multiply data to scale
+    .x(function(d) { return xScale(d.x); }) 
+    .y(function(d) { return yScale(d.y); })
+    .interpolate("basis"); // we can change this for alternative plots
+
+    var plot = svg.append("path")
+    .transition()
+    .duration(1000)
+            .attr("d", plotFunction(dataSet)) // access data
+            .attr("stroke", "orange")
+            .attr("stroke-width", 4)
+            .attr("fill", "none");
 
 </script>
