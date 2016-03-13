@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<title>Manually adding SVG to DOM</title>
+
+<style>
+
+body {
+	background-color: #aaaaaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- link to d3 lib-->
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<!-- JS and d3 code between script tags-->
+<script>
+
+// add svg element to body and 
+// use chaining syntax to set attributes
+// this is the d3 way.
+var w = 1000, h = 600;
+svg = d3.select("body").append("svg")
+			.attr("width", w)
+			.attr("height", h);
+
+// add some primitives to svg container
+svg.append("circle")
+			.attr("cx", 100)
+			.attr("cy", 100)
+			.attr("fill", "red")
+			.attr("r", "100");
+
+svg.append("rect")
+			.attr("x", 200)
+			.attr("y", 0)
+			.attr("width", 200)
+			.attr("height", 200)
+			.attr("fill", "orange");
+
+svg.append("ellipse")
+			.attr("cx", 475)
+			.attr("cy", 100)
+			.attr("rx", 75)
+			.attr("ry", 100)
+			.attr("fill", "yellow");
+
+// draw 100 random lines
+for(var i=0; i<100; i++){
+		var _x1 = 550 + Math.random()*200;
+		var _x2 = 550 + Math.random()*200;
+		var _y1 = Math.random()*200;
+		var _y2 = Math.random()*200;
+		svg.append("line")
+			.attr("x1", _x1)
+			.attr("x2", _x2)
+			.attr("y1", _y1)
+			.attr("y2", _y2)
+			.attr("stroke", "blue")
+			.attr("stroke-width", Math.random()*5);
+}
+
+svg.append("polyline")
+			.attr("points", "750, 10, 950, 200, 850, 0, 800, 180, 950, 100")
+			.attr("stroke", "green")
+			.attr("fill", "none")
+			.attr("stroke-width", 15);
+
+// use polygon to build a filled star
+var pts = "";
+var theta = 0;
+var ptCount = 9;
+for(var i=0; i<ptCount; i++){
+	pts += (100+Math.cos(theta)*100).toString() + ",";
+	pts += (300+Math.sin(theta)*100).toString() + ",";
+	theta += Math.PI*2/(ptCount*2);
+	pts += (100+Math.cos(theta)*40).toString() + ",";
+	if(i<ptCount-1){
+		pts += (300+Math.sin(theta)*40).toString() + ",";
+	} else {
+		pts += (300+Math.sin(theta)*40).toString();
+	}
+	theta += Math.PI*2/(ptCount*2);
+}
+svg.append("polygon")
+			.attr("points", pts)
+			.attr("fill", "tan")
+			.attr("stroke", "greenyellow")
+			.attr("fill", "tan")
+			.attr("stroke-width", 4);
+
+// polyline and polygon are
+// better handled using 
+// d3.svg.line() generator (see next)
+
+</script>
+
+</body>
+</html>
