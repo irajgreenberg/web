@@ -27,7 +27,7 @@ body {
 // use chaining syntax to set attributes
 // this is the d3 way.
 var w = 1000, h = 600;
-svg = d3.select("body").append("svg")
+var svg = d3.select("body").append("svg")
 			.attr("width", w)
 			.attr("height", h);
 
@@ -110,19 +110,19 @@ for(var i=0; i<ptCount; i++){
 
 // Use line object and accessor functions for x and y vals
 // to draw straight line path
-var generator = d3. svg.line() 
+var generator = d3.svg.line() 
 	.x( function( d) { return d[0]; }) 
 	.y( function( d) { return d[1]; });
 
 // add path to svg container
 // set d attribute for which generator to use
 // along with some rendering attribute
-svg.append('path') 
+svg.append("path") 
 	.datum(data) 
-	.attr({ 'd': generator, 'fill': 'none', 'stroke': 'steelblue' }); 
+	.attr({ "d": generator, "fill": "none", "stroke": "steelblue" }); 
 
 // Generate random data without offsets.
-// We'll use a transform to shift path
+// We"ll use a transform to shift path
 // also data is geenrated as array of objs 
 // instead of 2D array in earlier example
 data = [];
@@ -137,7 +137,7 @@ generator = d3. svg.line()
 	.interpolate("basis");
 
 // add path, coonnect data and set attributes
-svg.append('path') 
+svg.append("path") 
 	.datum(data) 
 	// set each attribue seperately
 	// .attr("transform", "translate(400.0, 200.0)")
@@ -147,7 +147,25 @@ svg.append('path')
 	// .attr("stroke-width", 5);
 
 	// or set attributes in 1 line
-	.attr({ 'transform': 'translate(400.0, 200.0)', 'd': generator, 'fill': 'none', 'stroke': 'pink', 'stroke-width': 5});
+	.attr({ "transform": "translate(400.0, 200.0)", "d": generator, "fill": "none", "stroke": "pink", "stroke-width": 5});
+
+// generate an arc
+ //var arc = d3.svg.line.radial()([[4,Math.PI/4],[70,Math.PI/2]]);
+
+var arc = d3.svg.line.radial()
+   // .interpolate("basis")
+    .tension(0)
+    .radius(100)
+    .angle(function(d, i) { return i; });
+ 
+ ptCount = 7;
+ svg.append("path")
+ 	.datum(d3.range(ptCount))
+ 	.attr("transform", "translate(700.0, 300.0)")
+	.attr("d", arc)
+	.attr("fill", "none")
+	.attr("stroke", "white")
+	.attr("stroke-width", 1);
 
 
 
