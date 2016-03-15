@@ -23,65 +23,44 @@ body {
 <!-- JS and d3 code between script tags-->
 <script>
 
-// add svg element to body and 
-// use chaining syntax to set attributes.
-// This is the d3 way!
-var w = 1000, h = 400;
-var svg = d3.select("body").append("svg")
-			.attr("width", w)
-			.attr("height", h)
-			.attr("border", "1px solid");
-
-
+// add svg element to body
 //1.
 // data for arc chart
-var annualBudget = {
-	auto:7500, 
-	home: 20000, 
-	food:15000,
-	utilities:6200, 
-	entertainment:3600, 
-	tution: 35000, 
-	medical:4500, 
-	pets:2000  
- };
-  
-function getAngs(){
-	var total = 0;
-	for(var index in annualBudget){
-		total += annualBudget[index];
-	}
-	var starts = [];
-	starts.push(0);
-	var ends = []
-	var totalAng = 0;
-	for(var index in annualBudget){
-		var val = annualBudget[index]/total*(Math.PI*2);
-		starts.push(val);
-		totalAng += val;
-		ends.push(totalAng);
-	}
-	console.log(starts);
-	return [starts, ends];
-}
+var annualBudget = [
+	{auto:7500}, 
+	{home: 20000}, 
+	{food:15000},
+	{utilities:6200}, 
+	{entertainment:3600}, 
+	{tution: 35000}, 
+	{medical:4500}, 
+	{pets:2000}  
+ ];
 
-// var angScale = d3.scale.linear()
-// 	.domain([d3.min(d3.values(annualBudget)), d3.max(d3.values(annualBudget))])
-// 	.range([-Math.PI/2, Math.PI/2]);
+var randCol = d3.scale.category20c();
 
+var data = [
+  [11975,  5871, 8916, 2868]
+];
 
-var arc = d3.svg.arc()
-		.innerRadius(40)
-		.outerRadius(100)
-	    .startAngle(function(d, i){return d[0];})
-	    .endAngle(function(d, i){return d[1];});
+var w = 1000, h = 400;
+var svg = d3.select("body").selectAll("svg")
+	.data(data)
+  	.enter().append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.attr("border", "1px solid")
+	.append("g");
 
-svg.selectAll("path")
-		.data(getAngs())
+    svg.selectAll("path")
+		.data(d3.layout.pie())
 		.enter().append("path")
-		.style("fill", "#5577ff")
-		.attr("d", arc)
+		.attr("d", d3.svg.arc()
+    	.innerRadius(60)
+        .outerRadius(100))
+		.style("fill", function(d,i){return randCol(i);}) // also works
 		.attr("transform", "translate(100, 100)");
+		
 
 
 
