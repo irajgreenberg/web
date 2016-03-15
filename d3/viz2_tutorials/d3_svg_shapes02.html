@@ -32,156 +32,62 @@ var svg = d3.select("body").append("svg")
 			.attr("height", h)
 			.attr("border", "1px solid");
 
-// add some shape primitives to svg container
+
 //1.
-svg.append("circle")
-			.attr("cx", 100)
-			.attr("cy", 100)
-			.attr("fill", "red")
-			.attr("r", "100");
-
-//2.
-svg.append("rect")
-			.attr("x", 200)
-			.attr("y", 0)
-			.attr("width", 200)
-			.attr("height", 200)
-			.attr("fill", "orange");
-
-//3.
-svg.append("ellipse")
-			.attr("cx", 500)
-			.attr("cy", 100)
-			.attr("rx", 100)
-			.attr("ry", 75)
-			.attr("fill", "yellow");
-
-//4.
-// Draw 100 random lines
-for(var i=0; i<100; i++){
-		var _x1 = 600 + Math.random()*200;
-		var _x2 = 600 + Math.random()*200;
-		var _y1 = Math.random()*200;
-		var _y2 = Math.random()*200;
-		svg.append("line")
-			.attr("x1", _x1)
-			.attr("x2", _x2)
-			.attr("y1", _y1)
-			.attr("y2", _y2)
-			.attr("stroke", "blue")
-			.attr("stroke-width", Math.random()*5);
-}
-
-svg.append("polyline")
-			.attr("points", "810, 10, 990, 190, 890, 10, 920, 180, 990, 100, 810, 190")
-			.attr("stroke", "green")
-			.attr("fill", "none")
-			.attr("stroke-width", 15);
-
-//5.
-// Use polygon to build a filled star
-var pts = "";
-var theta = 0;
-var ptCount = 9;
-for(var i=0; i<ptCount; i++){
-	pts += (100+Math.cos(theta)*100).toString() + ",";
-	pts += (300+Math.sin(theta)*100).toString() + ",";
-	theta += Math.PI*2/(ptCount*2);
-	pts += (100+Math.cos(theta)*40).toString() + ",";
-	if(i<ptCount-1){
-		pts += (300+Math.sin(theta)*40).toString() + ",";
-	} else {
-		pts += (300+Math.sin(theta)*40).toString();
+// data for arc chart
+var annualBudget = {
+	auto:7500, 
+	home: 20000, 
+	food:15000,
+	utilities:6200, 
+	entertainment:3600, 
+	tution: 35000, 
+	medical:4500, 
+	pets:2000  
+ };
+  
+function getAngs(){
+	var total = 0;
+	for(var index in annualBudget){
+		total += annualBudget[index];
 	}
-	theta += Math.PI*2/(ptCount*2);
-}
-svg.append("polygon")
-			.attr("points", pts)
-			.attr("fill", "tan")
-			.attr("stroke", "greenyellow")
-			.attr("fill", "tan")
-			.attr("stroke-width", 4);
-
-//6.
-// polyline and polygon are
-// better handled using 
-// d3.svg.line() generator (see next)
-
-// Generate some random data
-// with offsets (200,200) hard coded
-ptCount = 50;
-var data = [];
-for(var i=0; i<ptCount; i++){
-	data.push([200+Math.random()*200, 200+Math.random()*200]);
+	var starts = [];
+	starts.push(0);
+	var ends = []
+	var totalAng = 0;
+	for(var index in annualBudget){
+		var val = annualBudget[index]/total*(Math.PI*2);
+		starts.push(val);
+		totalAng += val;
+		ends.push(totalAng);
+	}
+	console.log(starts);
+	return [starts, ends];
 }
 
-//7.
-// Use line object and accessor functions for x and y vals
-// to draw straight line path
-var generator = d3.svg.line() 
-	.x( function( d) { return d[0]; }) 
-	.y( function( d) { return d[1]; });
-
-// add path to svg container
-// set d attribute for which generator to use
-// along with some rendering attribute
-svg.append("path") 
-	.datum(data) 
-	.attr({ "d": generator, "fill": "none", "stroke": "steelblue" }); 
-
-//8.
-// Generate random data without offsets.
-// We"ll use a transform to shift path
-// also data is geenrated as array of objs 
-// instead of 2D array in earlier example
-data = [];
-for(var i=0; i<ptCount; i++) {
-  data.push({"x" : Math.random()*200, "y" : Math.random()*200});
-}
-
-// generate curved path
-generator = d3. svg.line() 
-	.x( function( d) { return d.x; }) 
-	.y( function( d) { return d.y; })
-	.interpolate("basis");
-
-// add path, coonnect data and set attributes
-svg.append("path") 
-	.datum(data) 
-	// set each attribute seperately
-	// .attr("transform", "translate(400.0, 200.0)")
-	// .attr("d", generator)
-
-	// .attr("stroke", "pink")
-	// .attr("stroke-width", 5);
-
-	// or set attributes in 1 line
-	.attr({ "transform": "translate(400.0, 200.0)", "d": generator, "fill": "none", "stroke": "pink", "stroke-width": 5});
-
-//9.
-// Using svg.line.radial generate an arc from 0 -> PI
-ptCount = 30;
-var angle = d3.scale.linear()
-	.domain([0, ptCount-1])
-	.range([0, Math.PI]);
+// var angScale = d3.scale.linear()
+// 	.domain([d3.min(d3.values(annualBudget)), d3.max(d3.values(annualBudget))])
+// 	.range([-Math.PI/2, Math.PI/2]);
 
 
-var arc = d3.svg.line.radial()
-	// play with tension to see deformation of path
-    .interpolate("bundle")
-    .tension(1)
-    .radius(90)
-	.angle(function(d, i) { return angle(i); });
- 
- svg.append("path")
- 	.datum(d3.range(ptCount))
-	.attr("d", arc)
-	.attr("fill", "none")
-	.attr("stroke", "white")
-	.attr("stroke-width", 12)
-	.attr("transform", "translate(700.0, 300.0)");
+var arc = d3.svg.arc()
+		.innerRadius(40)
+		.outerRadius(100)
+	    .startAngle(function(d, i){return d[0];})
+	    .endAngle(function(d, i){return d[1];});
 
-//10.
+svg.selectAll("path")
+		.data(getAngs())
+		.enter().append("path")
+		.style("fill", "#5577ff")
+		.attr("d", arc)
+		.attr("transform", "translate(100, 100)");
+
+
+
+
+// add shape primitives to svg container
+//1.
 // Area chart
 // generate some curve data along x-axis
 data = []; // clear current data
