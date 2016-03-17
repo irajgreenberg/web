@@ -23,6 +23,60 @@ body {
 <!-- JS and d3 code between script tags-->
 <script>
 
+// set up svg for all examples
+var w = 1000, h = 400;
+var svg = d3.select("body").append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.attr("border", "1px solid")
+	.append("g") //uses SVG group element
+
+
+//1. Drawing an 180 deg (PI radians) arc
+var arc = d3.svg.arc()
+// set attributes
+    .outerRadius(100)
+    .innerRadius(60)
+    .startAngle(-Math.PI/2)
+    .endAngle(Math.PI/2);
+
+// add path to svg element
+// read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
+svg.append("path")
+    .attr("d", arc)
+    .attr("fill", "darkcyan") // set path attrbute to arc
+    .attr("transform", "translate(100,100)"); // move arc
+
+
+
+// //2. Drawing 2 180 deg (PI radians) arc
+ var arcData = [
+ 	{"outerRad":100, "innerRad":60, "startAng": Math.PI/2, "endAng": 3*Math.PI/2, "col": "tomato"},
+ 	{"outerRad":100, "innerRad":60, "startAng":-Math.PI/2, "endAng": Math.PI/2, "col": "darkcyan"}
+ ];
+
+
+ // A. arc 1
+var arc = d3.svg.arc()
+// set attributes
+     .outerRadius(function(d, i){return d.outerRad;})
+     .innerRadius(function(d, i){return d.innerRad;})
+     .startAngle(function(d, i){return d.startAng;})
+     .endAngle(function(d, i){return d.endAng;});
+
+// add path to svg element
+// read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
+svg.selectAll("path")
+	.data(arcData)
+	.enter().append("path")
+    .attr("d", arc)
+    .attr("fill", function(d){return d.col;}) // set path attrbute to arc
+    .attr("transform", "translate(300, 100)"); // move arc
+;
+
+
+
+
 
 // data for pie chart examples
 var annualBudget = [
@@ -39,37 +93,32 @@ var annualBudget = [
 var randCol = d3.scale.category20c();
 
 
-// set up svg
-var w = 1000, h = 400;
-var svg = d3.select("body").append("svg")
-	.attr("width", w)
-	.attr("height", h)
-	.attr("border", "1px solid")
-	.append("g"); //uses SVG group element
 
- //1. Pie chart using d3.svg.arc
-	var arc = d3.svg.arc()
-			.innerRadius(40)
-			.outerRadius(100)
-		    .startAngle(function(d, i){return d.start;})
-		    .endAngle(function(d, i){return d.start + d.size;})
-			;
 
-	var chart = d3.select("body").append("svg:svg")
-			.attr("class", "chart")
-			.attr("width", 420)
-			.attr("height", 420).append("svg:g")
-			.attr("transform", "translate(200,200)")
-			;
+ // //1. Pie chart using d3.svg.arc
+	// var arc = d3.svg.arc()
+	// 		.innerRadius(40)
+	// 		.outerRadius(100)
+	// 	    .startAngle(function(d, i){return d.start;})
+	// 	    .endAngle(function(d, i){return d.start + d.size;})
+	// 		;
 
-	chart.selectAll("path")
-			.data(data)
-			.enter().append("svg:path")
-			.style("fill", function(d, i){
-				return d.color;
-			})
-			.attr("d", arc)
-			;
+	// var chart = d3.select("body").append("svg:svg")
+	// 		.attr("class", "chart")
+	// 		.attr("width", 420)
+	// 		.attr("height", 420).append("svg:g")
+	// 		.attr("transform", "translate(200,200)")
+	// 		;
+
+	// chart.selectAll("path")
+	// 		.data(annualBudget)
+	// 		.enter().append("svg:path")
+	// 		.style("fill", function(d, i){
+	// 			return d.color;
+	// 		})
+	// 		.attr("d", arc)
+	// 		.attr("transform", "translate(100, 100)");
+
 
 //2. Pie chart layout manager
 
@@ -96,7 +145,7 @@ var svg = d3.select("body").append("svg")
     .attr("class", "arc") // assign class of .arc
 	.style("fill", function(d,i){return d.data.colorCode;}) 
 	//.style("fill", function(d,i){return randCol(i);}) // random color
-	.attr("transform", "translate(100, 100)");
+	.attr("transform", "translate(700, 100)");
 
 	g.append("path")
     .attr("d", arc);
