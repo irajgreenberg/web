@@ -23,43 +23,83 @@ body {
 <!-- JS and d3 code between script tags-->
 <script>
 
-// add svg element to body
-//1.
-// data for arc chart
+
+// data for pie chart examples
 var annualBudget = [
-	{auto:7500}, 
-	{home: 20000}, 
-	{food:15000},
-	{utilities:6200}, 
-	{entertainment:3600}, 
-	{tution: 35000}, 
-	{medical:4500}, 
-	{pets:2000}  
+	{"category":"auto", "amount":7500, "colorCode":"#776622"}, 
+	{"category":"home", "amount":20000, "colorCode":"#ffaa22"},
+	{"category":"food", "amount":15000, "colorCode":"#aa00bb"},
+	{"category":"utilities", "amount":6200, "colorCode":"#3344cc"},
+	{"category":"entertainment", "amount":3600, "colorCode":"#ff2288"},
+	{"category":"tution", "amount":35000, "colorCode":"#006622"},
+	{"category":"medical", "amount":4500, "colorCode":"#6688ff"},
+	{"category":"pets", "amount":2000, "colorCode":"#222233"}
  ];
 
 var randCol = d3.scale.category20c();
 
-var data = [
-  [11975,  5871, 8916, 2868]
-];
 
+// set up svg
 var w = 1000, h = 400;
-var svg = d3.select("body").selectAll("svg")
-	.data(data)
-  	.enter().append("svg")
+var svg = d3.select("body").append("svg")
 	.attr("width", w)
 	.attr("height", h)
 	.attr("border", "1px solid")
-	.append("g");
+	.append("g"); //uses SVG group element
 
-    svg.selectAll("path")
-		.data(d3.layout.pie())
-		.enter().append("path")
-		.attr("d", d3.svg.arc()
-    	.innerRadius(60)
-        .outerRadius(100))
-		.style("fill", function(d,i){return randCol(i);}) // also works
-		.attr("transform", "translate(100, 100)");
+ //1. Pie chart using d3.svg.arc
+	var arc = d3.svg.arc()
+			.innerRadius(40)
+			.outerRadius(100)
+		    .startAngle(function(d, i){return d.start;})
+		    .endAngle(function(d, i){return d.start + d.size;})
+			;
+
+	var chart = d3.select("body").append("svg:svg")
+			.attr("class", "chart")
+			.attr("width", 420)
+			.attr("height", 420).append("svg:g")
+			.attr("transform", "translate(200,200)")
+			;
+
+	chart.selectAll("path")
+			.data(data)
+			.enter().append("svg:path")
+			.style("fill", function(d, i){
+				return d.color;
+			})
+			.attr("d", arc)
+			;
+
+//2. Pie chart layout manager
+
+    var arc = d3.svg.arc()
+    .outerRadius(100)
+    .innerRadius(40);
+
+    // set layout type, a lyout helper
+    var pie = d3.layout.pie()
+      .sort(null)
+      // we want arc lengths in pie to be based on amount values
+      .value(function(d) {
+        return d.amount;
+      })
+      // .startAngle(Math.PI/2)
+      // .endAngle(Math.PI*2.5)
+      .padAngle(.02);
+
+
+     var g = svg.selectAll(".arc")
+    .data(pie(annualBudget)) // bind data to placeholders elements
+  	.enter()
+  	.append("g") // merge with group
+    .attr("class", "arc") // assign class of .arc
+	.style("fill", function(d,i){return d.data.colorCode;}) 
+	//.style("fill", function(d,i){return randCol(i);}) // random color
+	.attr("transform", "translate(100, 100)");
+
+	g.append("path")
+    .attr("d", arc);
 		
 
 
