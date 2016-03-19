@@ -3,25 +3,36 @@
 
 <head>
 
-<meta charset="utf-8">
-<title>Exploring SVG shape primitives in D3</title>
+	<meta charset="utf-8">
+	<title>Exploring SVG shape primitives in D3</title>
+	<!-- Original code from http://zeroviscosity.com/ -->
 
-<style>
+	<style>
 
-body {
-	background-color: #aaaaaa;
-}
+		body {
+			background-color: #aaaaaa;
+		}
 
-</style>
+		.legend {                                              
+        	font-size: 11px; 
+        	font-family: arial; 
+        	font                       
+      	}  
+                                                             
+      	rect {                                                    
+        	stroke-width: 2;
+      	}              
+
+	</style>
 </head>
 
 <body>
 
-<!-- link to d3 lib-->
-<script src="//d3js.org/d3.v3.min.js"></script>
+	<!-- link to d3 lib-->
+	<script src="//d3js.org/d3.v3.min.js"></script>
 
-<!-- JS and d3 code between script tags-->
-<script>
+	<!-- JS and d3 code between script tags-->
+	<script>
 
 // set up svg for all examples
 var w = 1000, h = 400;
@@ -29,56 +40,84 @@ var svg = d3.select("body").append("svg")
 	.attr("width", w)
 	.attr("height", h)
 	.attr("border", "1px solid")
-	.append("g") //uses SVG group element
+
+var box1Group = svg.append("g") //uses SVG group element
 
 
-//1. Drawing an 180 deg (PI radians) arc
+// 1. Drawing an 180 deg (PI radians) arc
 var arc = d3.svg.arc()
-// set attributes
-    .outerRadius(100)
-    .innerRadius(60)
-    .startAngle(-Math.PI/2)
-    .endAngle(Math.PI/2);
+	// set attributes
+	.outerRadius(100)
+	.innerRadius(0)
+	.startAngle(-Math.PI/2)
+	.endAngle(Math.PI/2);
 
-// add path to svg element
+// add path to box1Group
 // read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
-svg.append("path")
-    .attr("d", arc)
+box1Group.append("path")
+.attr("d", arc)
     .attr("fill", "darkcyan") // set path attrbute to arc
     .attr("transform", "translate(100,100)"); // move arc
 
 
+// 2. Drawing 2 180 deg (PI radians) arc
+var box2Group = svg.append("g") //compose in unique group element
 
-// //2. Drawing 2 180 deg (PI radians) arc
- var arcData = [
- 	{"outerRad":100, "innerRad":60, "startAng": Math.PI/2, "endAng": 3*Math.PI/2, "col": "tomato"},
- 	{"outerRad":100, "innerRad":60, "startAng":-Math.PI/2, "endAng": Math.PI/2, "col": "darkcyan"}
- ];
+var arcData = [
+	{"outerRad":100, "innerRad":0, "startAng": Math.PI/2, "endAng": -Math.PI/2, "col": "darkcyan"},
+	{"outerRad":100, "innerRad":0, "startAng": -Math.PI/2, "endAng": -Math.PI, "col": "tomato"},
+	{"outerRad":100, "innerRad":0, "startAng": -Math.PI, "endAng": -Math.PI*1.5, "col": "khaki"}
+];
 
-
- // A. arc 1
 var arc = d3.svg.arc()
-// set attributes
-     .outerRadius(function(d, i){return d.outerRad;})
-     .innerRadius(function(d, i){return d.innerRad;})
-     .startAngle(function(d, i){return d.startAng;})
-     .endAngle(function(d, i){return d.endAng;});
+	// set attributes
+	.outerRadius(function(d, i){return d.outerRad;})
+	.innerRadius(function(d, i){return d.innerRad;})
+	.startAngle(function(d, i){return d.startAng;})
+	.endAngle(function(d, i){return d.endAng;});
 
-// add path to svg element
+// add path to box2Group
 // read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
-svg.selectAll("path")
+box2Group.selectAll("path")
 	.data(arcData)
 	.enter().append("path")
-    .attr("d", arc)
-    .attr("fill", function(d){return d.col;}) // set path attrbute to arc
-    .attr("transform", "translate(300, 100)"); // move arc
-;
+	.attr("d", arc)
+	    .attr("fill", function(d){return d.col;}) // set path attrbute to arc
+	    .attr("transform", "translate(300, 100)"); // move arc
 
 
+// 3. donut->pie Chart based on single object
+var donut1Group = svg.append("g") //uses SVG group element
+    .attr("transform", "translate(500,100)"); // move donut
+
+var annualBudget = {
+	"amount": [7500, 20000, 15000, 6200, 3600, 35000, 4500, 2000]
+}
 
 
+var color = d3.scale.category20b();
 
-// data for pie chart examples
+// unsorted pie layout manager
+var pie = d3.layout.pie()
+    .sort(null);
+
+// arc path for 3 donut charts
+var arc = d3.svg.arc()
+	.outerRadius(100)
+	.innerRadius(70);
+
+// link data to paths under donut1Group
+var path = donut1Group.selectAll("path")
+    .data(pie(annualBudget.amount))
+    .enter().append("path") // bind data
+    .attr("fill", function(d, i) { return color(i); })
+    .attr("d", arc);
+	
+
+// 4. Donut Chart based on array of objects
+var donut2Group = svg.append("g") //uses SVG group element
+    .attr("transform", "translate(700,100)"); // move Donut
+
 var annualBudget = [
 	{"category":"auto", "amount":7500, "colorCode":"#776622"}, 
 	{"category":"home", "amount":20000, "colorCode":"#ffaa22"},
@@ -88,96 +127,78 @@ var annualBudget = [
 	{"category":"tution", "amount":35000, "colorCode":"#006622"},
 	{"category":"medical", "amount":4500, "colorCode":"#6688ff"},
 	{"category":"pets", "amount":2000, "colorCode":"#222233"}
- ];
+];
 
-var randCol = d3.scale.category20c();
+// update values in pie layout manager
+	pie.sort(null)
+		// arc lengths in pie based on amount values
+		// in annualBudget object array
+		.value(function(d) {
+			return d.amount;
+		})
+		// add space between wedges
+		.padAngle(.04);
 
+// link data to paths under donut2Group
+ path = donut2Group.selectAll("path")
+     // call pie function to extract relevant data
+    .data(pie(annualBudget))
+  	.enter() // bind data
+  	.append("path") 
+  	.attr("d", arc)
+  	// fill with colorCode in object array
+    .style("fill", function(d,i){
+    		return d.data.colorCode;} ) 
+	
+// 5. Adding a legend to Donut chart
+var donut3Group = svg.append("g") //uses SVG group element
+    .attr("transform", "translate(900,100)"); // move Donut
 
+var legendRectSize = 8;                                
+var legendSpacing = 4;
 
-
- // //1. Pie chart using d3.svg.arc
-	// var arc = d3.svg.arc()
-	// 		.innerRadius(40)
-	// 		.outerRadius(100)
-	// 	    .startAngle(function(d, i){return d.start;})
-	// 	    .endAngle(function(d, i){return d.start + d.size;})
-	// 		;
-
-	// var chart = d3.select("body").append("svg:svg")
-	// 		.attr("class", "chart")
-	// 		.attr("width", 420)
-	// 		.attr("height", 420).append("svg:g")
-	// 		.attr("transform", "translate(200,200)")
-	// 		;
-
-	// chart.selectAll("path")
-	// 		.data(annualBudget)
-	// 		.enter().append("svg:path")
-	// 		.style("fill", function(d, i){
-	// 			return d.color;
-	// 		})
-	// 		.attr("d", arc)
-	// 		.attr("transform", "translate(100, 100)");
-
-
-//2. Pie chart layout manager
-
-    var arc = d3.svg.arc()
-    .outerRadius(100)
-    .innerRadius(40);
-
-    // set layout type, a lyout helper
-    var pie = d3.layout.pie()
-      .sort(null)
-      // we want arc lengths in pie to be based on amount values
-      .value(function(d) {
-        return d.amount;
-      })
-      // .startAngle(Math.PI/2)
-      // .endAngle(Math.PI*2.5)
-      .padAngle(.02);
+// link data to paths under donut2Group
+  path = donut3Group.selectAll("path")
+     // call pie function to extract relevant data
+    .data(pie(annualBudget))
+  	.enter() // bind data
+  	.append("path") 
+  	.attr("d", arc)
+  	// fill with colorCode in object array
+    .style("fill", function(d,i){
+    		return d.data.colorCode;} ) 
 
 
-     var g = svg.selectAll(".arc")
-    .data(pie(annualBudget)) // bind data to placeholders elements
-  	.enter()
-  	.append("g") // merge with group
-    .attr("class", "arc") // assign class of .arc
-	.style("fill", function(d,i){return d.data.colorCode;}) 
-	//.style("fill", function(d,i){return randCol(i);}) // random color
-	.attr("transform", "translate(700, 100)");
+var legend = donut3Group.selectAll('.legend')                     
+      .data(pie(annualBudget))                                  
+      .enter()                                                
+      .append('g')                                            
+      .attr('class', 'legend')                                
+      .attr('transform', function(d, i) {                     
+        var height = legendRectSize + legendSpacing;          
+        var offset =  height * color.domain().length / 2;     
+        var horz = -2 * legendRectSize;                       
+        var vert = i * height - offset;                       
+        return 'translate(' + horz + ',' + vert + ')';        
+      });                                                     
 
-	g.append("path")
-    .attr("d", arc);
-		
+    legend.append('rect')                                     
+      .attr('width', legendRectSize)                          
+      .attr('height', legendRectSize)                         
+       .style("fill", function(d,i){
+    		return d.data.colorCode;} )                                  
+       .style("stroke", function(d,i){
+    		return d.data.colorCode;} )                                
+      
+    legend.append('text')                                     
+      .attr('x', legendRectSize + legendSpacing)              
+      .attr('y', legendRectSize - legendSpacing + 4)              
+      .text(function(d) { return d.data.category; });                       
 
 
 
 
-// add shape primitives to svg container
-//1.
-// Area chart
-// generate some curve data along x-axis
-data = []; // clear current data
-ptCount = 100;
-var theta = 0.0;
-for(var i=0; i<ptCount; i++){
-	data.push({"x" : 200/ptCount*i, "y" : Math.cos(theta += Math.PI/16)*30});
-}
-var area = d3.svg.area()
-	.x(function(d) { return d.x; })
-	.y0(100)
-	.y1(function(d) { return d.y; });
-
-svg.append("path")
-	.datum(data)
-	.attr("d", area)
-	.attr("fill", "hotpink")
-	.attr("transform", "translate(800.0, 300)");
-
-//11.
-// Final Decoration
-// add pretty boxes around all examples;
+// Add Boxes around all examples;
 var offsets = [[0,0]];
 var cols = 5, rows = 2;
 var sz = 200;
@@ -187,10 +208,11 @@ for(var i=0; i<cols; i++){
 	}
 }
 
-svg.selectAll("rect")
-    .data(offsets)
-    .enter()
-    .append("rect")
+var outerBoxGroup = svg.append("g") //group boxes
+outerBoxGroup.selectAll("rect")
+	.data(offsets)
+	.enter()
+	.append("rect")
 	.attr("height", 200)
 	.attr("width", 200)
 	.style("stroke", "gray")
@@ -199,7 +221,7 @@ svg.selectAll("rect")
 	.attr('transform', translate);
 
 function translate(d) {
-		return "translate("+d[0]+", "+d[1]+")"
+	return "translate("+d[0]+", "+d[1]+")"
 }
 
 </script>
