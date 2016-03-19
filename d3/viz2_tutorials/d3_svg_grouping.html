@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<title>Exploring SVG shape primitives in D3</title>
+
+<style>
+
+body {
+	background-color: #aaaaaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- link to d3 lib-->
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<!-- JS and d3 code between script tags-->
+
+<svg width="800" height="400">
+	<g transform="translate(150, 0)">
+	<g>
+		<circle cx="20" cy="20" r="20" fill="green" />
+		<circle cx="70" cy="70" r="20" fill="purple" />
+	</g>
+	<g>
+		<rect x="110" y="110" height="30" width="30" fill="blue" />
+		<rect x="160" y="160" height="30" width="30" fill="red" />
+	</g>
+</g>
+</svg>
+
+<script>
+
+// set up svg for all examples
+var w = 1000, h = 400;
+var svg = d3.select("body").append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.attr("border", "1px solid")
+	.append("g") //uses SVG group element
+
+
+
+</script>
+
+</body>
+</html>

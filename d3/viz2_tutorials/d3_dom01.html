@@ -12,12 +12,13 @@
     margin-left: 0;
     margin-right: 0;
     font-family: "Times New Roman", Georgia, Serif;
-    font: 15px arial, sans-serif;
+    font: 20px arial, sans-serif;
     color: blue;
 }
 
 p.biggie {
   color: red;
+  background: orange;
   font-size: 200%;
   font: italic bold;
 }
@@ -28,10 +29,21 @@ p.biggie {
   <script src="//d3js.org/d3.v3.min.js"></script>
 
   <script>
-   </script>
-   <p class> This is some really exciting stuff <p>
-   <p class="biggie"> This is some even more exciting stuff <p>
+  var svg = d3.select("body")
+    .append("p")
+    .text("This is some really exciting stuff")
 
+    .append("p")
+    .style("font-size", "40px")
+    .style("color", "#87dd44")
+    .text("This is EVEN more exciting")
+
+    .append("p")
+    .attr("class", "biggie")
+    .text("This may truly blow your mind")
+   
+   </script>
+  
  
 </body>
 </html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<title>Creating SVG with d3</title>
+
+<style>
+
+body {
+	background-color: #aaaaaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- link to d3 lib-->
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<!-- draw 4 circles using svg elments directly -->
+<svg width="200" height="200"> <!-- create svg container -->
+	<g> <!-- group all elements -->
+		<g>
+			<circle cx="20" cy="20" r="20" fill="green" />
+			<circle cx="70" cy="20" r="20" fill="purple" />
+		</g>
+		<g>
+			<rect x="0" y="50" width="40" height="40" fill="red" />
+			<rect x="50" y="50" width="40" height="40" fill="blue" />
+		</g>
+	</g>
+</svg>
+
+<script>
+
+// Draw 4 circles using d3.js lib
+
+// create some circle data as an array of objects
+var circleData = [
+	{"cx" : 20, "cy" : 20, "r" : 20, "fill" : "yellow"},
+	{"cx" : 70, "cy" : 20, "r" : 20, "fill" : "orange"}
+]
+var rectData = [
+	{"x" : 0, "y" : 50, "width" : 40, "height" : 40, "fill" : "gray"},
+	{"x" : 50, "y" : 50, "width" : 40, "height" : 40, "fill" : "lime"}
+]
+var w = 200, h = 200;
+// create svg container
+var svg = d3.select("body").append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.append("g") //group all elements in container
+
+// create sub-groups
+var circleGroup = svg.append("g");
+var rectGroup = svg.append("g");
+
+// create placeholders for circle data
+var circles = circleGroup.selectAll("circle")
+	.data(circleData)
+	.enter()
+	.append("circle");
+
+var circleAttributes = circles
+						.attr("cx", function(d) { return d.cx;})
+						.attr("cy", function(d) { return d.cy;})
+						.attr("r", function(d) { return d.r;})
+						.style("fill", function(d) { return d.fill;});
+
+// create placeholders for rect data
+var rects = rectGroup.selectAll("rect")
+	.data(rectData)
+	.enter()
+	.append("rect");
+
+var rectAttributes = rects
+					.attr("x", function(d) { return d.x;})
+					.attr("y", function(d) { return d.y;})
+					.attr("width", function(d) { return d.width;})
+					.attr("height", function(d) { return d.height;})
+					.style("fill", function(d) { return d.fill;});
+
+
+// HTML code should now be same for both groups. Review in Chrome under elements tab
+</script>
+
+</body>
+</html>
