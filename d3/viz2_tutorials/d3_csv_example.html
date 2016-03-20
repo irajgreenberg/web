@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<title>d3 csv parsing example</title>
+	<!-- Original code from http://zeroviscosity.com/ -->
+</head>
+
+<body>
+
+	<!-- link to d3 lib-->
+	<script src="//d3js.org/d3.v3.min.js"></script>
+
+<script>
+d3.csv("budgetData.csv", function(d) {
+  return {
+    category: d.category,
+    amount: +d.amount,
+    colorCode: d.colorCode,
+  };
+}, function(error, rows) {
+  console.log(rows);
+});
+</script>
+</body>
+
+</html>
