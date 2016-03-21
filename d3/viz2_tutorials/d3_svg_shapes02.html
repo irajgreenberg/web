@@ -16,21 +16,21 @@
 		.legend {                                              
         	font-size: 11px; 
         	font-family: arial;                       
-      	}  
+      }  
 
-      	.legend2 {                                              
-        	font-size: 13px; 
-        	font-family: arial; 
-        	stroke: #445544;                
-      	}  
-                                                             
-      	rect {                                                    
-        	stroke-width: 2;
-      	}  
+  	.legend2 {                                              
+    	font-size: 12px; 
+    	font-family: arial; 
+    	stroke: #445544;                
+  	}  
+                                                         
+  	rect {                                                    
+    	stroke-width: 2;
+  	}  
 
-      	circle {                                                    
-        	stroke-width: 2;
-      	}             
+  	circle {                                                    
+    	stroke-width: 2;
+  	}             
 
 	</style>
 </head>
@@ -41,10 +41,10 @@
 	<script src="//d3js.org/d3.v3.min.js"></script>
 
 	<!-- JS and d3 code between script tags-->
-	<script>
+<script>
 
 // set up svg for all examples
-var w = 1000, h = 400;
+var w = 600, h = 400;
 var svg = d3.select("body").append("svg")
 	.attr("width", w)
 	.attr("height", h)
@@ -64,9 +64,9 @@ var arc = d3.svg.arc()
 // add path to box1Group
 // read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
 box1Group.append("path")
-.attr("d", arc)
-    .attr("fill", "darkcyan") // set path attrbute to arc
-    .attr("transform", "translate(100,100)"); // move arc
+  .attr("d", arc)
+  .attr("fill", "darkcyan") // set path attrbute to arc
+  .attr("transform", "translate(100,100)"); // move arc
 
 
 // 2. Drawing 2 180 deg (PI radians) arc
@@ -89,10 +89,11 @@ var arc = d3.svg.arc()
 // read about paths here: https://www.dashingd3js.com/svg-paths-and-d3js
 box2Group.selectAll("path")
 	.data(arcData)
-	.enter().append("path")
+	.enter()
+  .append("path")
 	.attr("d", arc)
-	    .attr("fill", function(d){return d.col;}) // set path attrbute to arc
-	    .attr("transform", "translate(300, 100)"); // move arc
+  .attr("fill", function(d){return d.col;}) // set path attrbute to arc
+  .attr("transform", "translate(300, 100)"); // move arc
 
 
 // 3. donut->pie Chart based on single object
@@ -102,7 +103,6 @@ var donut1Group = svg.append("g") //uses SVG group element
 var annualBudget = {
 	"amount": [7500, 20000, 15000, 6200, 3600, 35000, 4500, 2000]
 }
-
 
 var color = d3.scale.category20b();
 
@@ -118,14 +118,15 @@ var arc = d3.svg.arc()
 // link data to paths under donut1Group
 var path = donut1Group.selectAll("path")
     .data(pie(annualBudget.amount))
-    .enter().append("path") // bind data
+    .enter()
+    .append("path") // bind data
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 	
 
 // 4. Donut Chart based on array of objects
 var donut2Group = svg.append("g") //uses SVG group element
-    .attr("transform", "translate(700,100)"); // move Donut
+    .attr("transform", "translate(100,300)"); // move Donut
 
 var annualBudget = [
 	{"category":"auto", "amount":7500, "colorCode":"#776622"}, 
@@ -141,7 +142,8 @@ var annualBudget = [
 
 
 // update values in pie layout manager
-	pie.sort(null)
+	var pie = d3.layout.pie()
+    .sort(null)
 		// arc lengths in pie based on amount values
 		// in annualBudget object array
 		.value(function(d) {
@@ -163,7 +165,7 @@ var annualBudget = [
 	
 // 5. Adding a legend to Donut chart
 var donut3Group = svg.append("g") //uses SVG group element
-    .attr("transform", "translate(900,100)"); // move Donut
+    .attr("transform", "translate(300,300)"); // move Donut
 
 var legendRectSize = 8;                                
 var legendSpacing = 4;
@@ -207,22 +209,27 @@ var legend = donut3Group.selectAll('.legend')
 
 
 //6. Load data from .csv data and add some transitions
-annualBudget = []
-d3.csv("budgetData.csv", function(data) {
-   annualBudget = data.map(function(d) { return { category: d.category, amount: +d.amount, colorCode: d.colorCode }; });
-   // call function to use data now that is is safely loaded
-   var donut3Group = svg.append("g") //uses SVG group element
-    .attr("transform", "translate(100,300)"); // move Donut
+// asychronous so requires a callback
+d3.csv('budgetData.csv', function(error, annualBudget) {
+  annualBudget.forEach(function(d) { 
+    d.amount = +d.amount; // ensure returned string d.amount is cast to number
+  });  
+//alternative to forEach approach
+//d3.csv("budgetData.csv", function(data) {
+   	//annualBudget = data.map(function(d) { return { category: d.category, amount: +d.amount, colorCode: d.colorCode }; });
+   
+   // data is now safely loaded
+   	var donut3Group = svg.append("g") //uses SVG group element
+    .attr("transform", "translate(500, 300)"); // move Donut
 
-pie.padAngle(.08);
+	pie.padAngle(.2);
 
-var arc = d3.svg.arc()
+	var arc = d3.svg.arc()
 	.outerRadius(100)
 	.innerRadius(80);
 
-
-// link data to paths under donut3Group
-  path = donut3Group.selectAll("path")
+	// link data to paths under donut3Group
+  	path = donut3Group.selectAll("path")
      // call pie function to extract relevant data
     .data(pie(annualBudget))
   	.enter() // bind data
@@ -238,8 +245,8 @@ var arc = d3.svg.arc()
     .style("stroke", "black")
     .style("stroke-width", 2);
 
-legendRectSize = 9;                                
-var legendSpacing = 8;
+	legendRectSize = 9;                                
+	var legendSpacing = 8;
 
 	legend = donut3Group.selectAll('.legend')                     
       .data(pie(annualBudget))                                  
@@ -256,30 +263,29 @@ var legendSpacing = 8;
 
     legend.append('circle')                      
       .attr('r', 0)  
-      .style("fill", "#aaaaaa")                                  
+      .style("fill", "none")                                  
       .style("stroke", "#aaaaaa") 
       .transition().duration(1500) 
       .attr('r', 5)                       
-      .style("fill", "#dddddd") 
-      .attr('cx', -15) 
+      //.style("fill", "#dddddd") 
+      .attr('cx', -25) 
       .attr('cy', 28)  
-      .transition().duration(2500)  
+      .transition().duration(1700)  
       .attr('cx', -7)                                          
       .style("stroke", function(d,i){
-    		return d.data.colorCode;} )                                
+    		return d.data.colorCode; })                                
       
     legend.append('text') 
-    .style("stroke", "#aaaaaa") 
+    .style("stroke", "none") 
     .style("fill", "#aaaaaa") 
     .transition().duration(5000) 
     .style("fill", "#334433")
-    .style("stroke", "#334433")                                    
+    //.style("stroke", "#334433")                                    
 	.attr('x', 3)              
 	.attr('y', 31) 
 	 //.attr('fill', function(d) { return d.data.colorCode; })           
 	.text(function(d) { return d.data.category; });  
  });
-
 
 
 

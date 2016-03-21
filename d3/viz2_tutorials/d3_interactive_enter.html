@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+    <div id="viz"></div>
+    <script type="text/javascript">
+
+    var data = [];
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 800)
+        .attr("height", 600);    
+
+        var circles;
+        svg.on("click", function() {
+            var coords = d3.mouse(this);
+            data.push(d3.mouse(this));
+
+        circles = svg.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return d[0];})
+            .attr("cy", function(d) { return d[1];})
+            .style("stroke", "gray")
+            .style("fill", "white")
+            .attr("r", 40)
+            .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+            .on("mouseout", function(){d3.select(this).style("fill", "white");})
+            .transition()
+            .duration(1000)
+            .attr("r", 5)
+        });
+
+    
+    </script>
+</body>
+</html>

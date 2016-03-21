@@ -140,7 +140,7 @@ for(var i=0; i<ptCount; i++) {
 }
 
 // generate curved path
-generator = d3. svg.line() 
+generator = d3.svg.line() 
 	.x( function( d) { return d.x; }) 
 	.y( function( d) { return d.y; })
 	.interpolate("basis");
@@ -149,14 +149,14 @@ generator = d3. svg.line()
 svg.append("path") 
 	.datum(data) 
 	// set each attribute seperately
-	// .attr("transform", "translate(400.0, 200.0)")
-	// .attr("d", generator)
-
-	// .attr("stroke", "pink")
-	// .attr("stroke-width", 5);
+	.attr("transform", "translate(400.0, 200.0)")
+	.attr("d", generator)
+	.attr("fill", "none")
+	.attr("stroke", "pink")
+	.attr("stroke-width", 5);
 
 	// or set attributes in 1 line
-	.attr({ "transform": "translate(400.0, 200.0)", "d": generator, "fill": "none", "stroke": "pink", "stroke-width": 5});
+	// .attr({ "transform": "translate(400.0, 200.0)", "d": generator, "fill": "none", "stroke": "pink", "stroke-width": 5});
 
 //9.
 // Using svg.line.radial generate an arc from 0 -> PI
@@ -171,7 +171,7 @@ var arc = d3.svg.line.radial()
     .interpolate("bundle")
     .tension(1)
     .radius(90)
-	.angle(function(d, i) { return angle(i); });
+	.angle(function(d, i) { return angle(d); });
  
  svg.append("path")
  	.datum(d3.range(ptCount))
@@ -222,7 +222,9 @@ svg.selectAll("rect")
 	.style("stroke", "gray")
 	.style("fill", "none")
 	.style("stroke-width", 2)
-	.attr('transform', translate);
+	//.attr('transform', translate);
+	.attr('transform', function (d) {
+		return "translate("+d[0]+", "+d[1]+")"});
 
 function translate(d) {
 		return "translate("+d[0]+", "+d[1]+")"

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style> 
+
+  table {
+    /*To avoid spaces between the cells*/
+    border-collapse: collapse;
+    /*To center it*/
+    margin-left:auto; 
+    margin-right:auto;
+  }
+  td {
+    /*To add solid lines in the cells*/
+    border: solid 1px gray;
+    /*To add spacing between the text in the cells and the borders*/
+    padding: 10px;
+    text-align: center;
+  }
+
+  </style>
+</head>
+<body>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+
+  <script>
+
+  var titles = ["name", "age", "city", "state"];
+  var data = [
+    {"name":"John Wilcox", "age":33, "city":"Dallas", "state":"Texas"},
+    {"name":"Sally Malone", "age":62, "city":"Huntington", "state":"New York"},
+    {"name":"Irving Penlin", "age":29, "city":"Allentown", "state":"Pennsylvania"},
+    {"name":"Maggie Stramm", "age":46, "city":"Pamona", "state":"California"},
+    {"name":"Cheevers Smallings", "age":51, "city":"Dublin", "state":"Ohio"},
+    {"name":"Steven Slocum", "age":53, "city":"Burlington", "state":"Vermont"},
+    {"name":"Katherine Bethel", "age":28, "city":"Garland", "state":"Texas"}
+  ]
+  var table = d3.select("body")
+  .append("table");
+
+   thead = table.append("thead"), tbody = table.append("tbody");
+
+
+   thead.append("tr")
+        .selectAll("th")
+        .data(titles)
+        .enter()
+        .append("th")
+             .text(function(titles) { return titles; });
+
+  var trs = tbody.selectAll("tr")
+    .data(data)
+    .enter()
+    .append("tr");
+
+ 
+var tds = trs.selectAll("td")
+  .data(function(o){console.log(o.name); })
+  .enter()
+  .append("td")
+ //.text("hello")
+
+  function getRandCol(){
+  //from: http://www.paulirish.com/2009/random-hex-color-code-snippets/
+  return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
+</script>
+
+</body>
+</html>

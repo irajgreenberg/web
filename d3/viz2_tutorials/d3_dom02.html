@@ -26,41 +26,16 @@
   <script src="//d3js.org/d3.v3.min.js"></script>
 
   <script>
-
-  var titles = ["name", "age", "city", "state"];
-  var data = [
-    {"name":"John Wilcox", "age":33, "city":"Dallas", "state":"Texas"},
-    {"name":"Sally Malone", "age":62, "city":"Huntington", "state":"New York"},
-    {"name":"Irving Penlin", "age":29, "city":"Allentown", "state":"Pennsylvania"},
-    {"name":"Maggie Stramm", "age":46, "city":"Pamona", "state":"California"},
-    {"name":"Cheevers Smallings", "age":51, "city":"Dublin", "state":"Ohio"},
-    {"name":"Steven Slocum", "age":53, "city":"Burlington", "state":"Vermont"},
-    {"name":"Katherine Bethel", "age":28, "city":"Garland", "state":"Texas"}
-  ]
   var table = d3.select("body")
   .append("table");
-
-   thead = table.append("thead"), tbody = table.append("tbody");
-
-
-   thead.append("tr")
-        .selectAll("th")
-        .data(titles)
-        .enter()
-        .append("th")
-             .text(function(titles) { return titles; });
-
-  var trs = tbody.selectAll("tr")
-    .data(data)
-    .enter()
-    .append("tr");
-
- 
-var tds = trs.selectAll("td")
-  .data(function(o){console.log(o.name); })
-  .enter()
-  .append("td")
- //.text("hello")
+  
+  for(var i=0; i<100; i++){
+    var tr = table.append("tr");
+    for(var j=0; j<100; j++){
+      tr.append("td")
+      .style("background-color", getRandCol());
+    }
+  }
 
   function getRandCol(){
   //from: http://www.paulirish.com/2009/random-hex-color-code-snippets/
