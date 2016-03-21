@@ -21,9 +21,12 @@ td {
 
 </style>
 
-<script>
+</head>
 
-// color class
+<body>
+    <script>
+
+    // color class
 var RGB = function (r, g, b) {
     this.r = r;
     this.g = g;
@@ -76,7 +79,7 @@ function createHTMLGradient(rows, cols, startColor, endColor){
         for(var j=0; j<cols; j++){
             var td = document.createElement('td');
             td.appendChild(document.createTextNode('.'));
-            td.style.backgroundColor = rgba("+Math.round((r1+deltaR*k))+", "+Math.round((g1+deltaG*k))+", "+Math.round((b1+deltaB*k))+", 1.0);
+            td.style.backgroundColor = "rgba("+Math.round((r1+deltaR*k))+", "+Math.round((g1+deltaG*k))+", "+Math.round((b1+deltaB*k))+", 1.0)";
             tr.appendChild(td);
         }
 
@@ -87,11 +90,6 @@ function createHTMLGradient(rows, cols, startColor, endColor){
     document.body.appendChild(table);
 }
 
-</script>
-</head>
-
-<body>
-    <script>
     var c1 = new RGB(255, 255, 0);
     var c2 = new RGB(255, 0, 255);
     createHTMLGradient(60, 30, c1, c2);
