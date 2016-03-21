@@ -20,8 +20,8 @@ function setup() {
 
   indices = [
 			// long diagonal supports
-			new VerletIndex(0, 13, false), 
-			new VerletIndex(1, 12, false),  
+			new VerletIndex(0, 13, true), 
+			new VerletIndex(1, 12, true),  
 
 			// horizontal supports
 			new VerletIndex(0, 1, true), new VerletIndex(2, 3, true), new VerletIndex(4, 5, true), 
@@ -36,15 +36,15 @@ function setup() {
 			];
 
   org = new VerletOrg(new p5.Vector(0, 0), vecs, indices);
-  org.nudge(0, new p5.Vector(20.2, 25.25));
-  org.nudge(5, new p5.Vector(-1.2, -5.25));
-  org.nudge(10, new p5.Vector(4.2, .25));
+  // org.nudge(0, new p5.Vector(20.2, 25.25));
+  // org.nudge(5, new p5.Vector(-1.2, -5.25));
+  // org.nudge(10, new p5.Vector(4.2, .25));
 
 }
 
 function draw() {
   // custom background with fade
-  fill(135, 35);
+  fill(135, 25);
   rect(0, 0, width, height);
 
 
